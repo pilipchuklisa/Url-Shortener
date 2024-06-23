@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>urlshortener</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>urlshortener</name>
+	<description>Сервис сокращенных ссылок</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.crnk</groupId>
+			<artifactId>crnk-setup-spring-boot2</artifactId>
+			<version>3.4.20210509072026</version>
+		</dependency>
+		<dependency>
+			<groupId>io.crnk</groupId>
+			<artifactId>crnk-client</artifactId>
+			<version>3.4.20210509072026</version>
+		</dependency>
+		<dependency>
+			<groupId>io.crnk</groupId>
+			<artifactId>crnk-jpa</artifactId>
+			<version>2.6.20180522184741</version>
+		</dependency>
+		<dependency>
+			<groupId>io.crnk</groupId>
+			<artifactId>crnk-monitor-brave4</artifactId>
+			<version>3.4.20210509072026</version>
+		</dependency>
+		<dependency>
+			<groupId>io.crnk</groupId>
+			<artifactId>crnk-core</artifactId>
+			<version>2.3.20171118162238</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.32</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -39,6 +39,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
@@ -47,36 +51,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.crnk</groupId>
-			<artifactId>crnk-setup-spring-boot2</artifactId>
-			<version>3.4.20210509072026</version>
-		</dependency>
-		<dependency>
-			<groupId>io.crnk</groupId>
-			<artifactId>crnk-client</artifactId>
-			<version>3.4.20210509072026</version>
-		</dependency>
-		<dependency>
-			<groupId>io.crnk</groupId>
-			<artifactId>crnk-jpa</artifactId>
-			<version>2.6.20180522184741</version>
-		</dependency>
-		<dependency>
-			<groupId>io.crnk</groupId>
-			<artifactId>crnk-monitor-brave4</artifactId>
-			<version>3.4.20210509072026</version>
-		</dependency>
-		<dependency>
-			<groupId>io.crnk</groupId>
-			<artifactId>crnk-core</artifactId>
-			<version>2.3.20171118162238</version>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.32</version>
 		</dependency>
 	</dependencies>
 

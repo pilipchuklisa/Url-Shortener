@@ -13,9 +13,9 @@ public record JsonApiResponse(Data data) {
         }
     }
 
-    public record Attributes(String shortCode, String longUrl) {
+    public record Attributes(String shortUrl, String longUrl) {
         public Attributes(Url url) {
-            this(url.getShortCode(), url.getLongUrl());
+            this("http://localhost:8080/api/urls/" + url.getShortCode(), url.getLongUrl());
         }
     }
 }

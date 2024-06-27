@@ -21,7 +21,9 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/urls/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/urls").permitAll()
+                        .requestMatchers("/api/urls").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/urls/search").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/urls/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()

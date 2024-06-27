@@ -8,6 +8,7 @@ import com.example.urlshortener.repository.UrlRepository;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,23 +31,32 @@ public class UrlService {
         this.urlMapper = urlMapper;
     }
 
+    @Transactional
     public JsonApiResponse createShortUrl(JsonApiRequest request) {
         String longUrl = request.data().attributes().longUrl();
-        String shortCode;
-        Optional<Url> existingMapping;
+        Optional<Url> existingUrlOptional = urlRepository.findByLongUrl(longUrl);
 
-        do {
-            shortCode = generateShortCode();
-            existingMapping = urlRepository.findByShortCode(shortCode);
-        } while (existingMapping.isPresent());
+        if (existingUrlOptional.isPresent()) {
+            Url existingUrl = existingUrlOptional.get();
+            if (existingUrl.isValid()) {
+                return new JsonApiResponse(existingUrl);
+            } else {
+                existingUrl.setValid(true);
+                urlRepository.save(existingUrl);
+                return new JsonApiResponse(existingUrl);
+            }
+        } else {
+            String shortCode;
+            do {
+                shortCode = generateShortCode();
+            } while (urlRepository.findByShortCode(shortCode).isPresent());
 
-        Url url = new Url();
-        url.setShortCode(shortCode);
-        url.setLongUrl(longUrl);
-
-        urlRepository.save(url);
-
-        return urlMapper.toJsonApiResponse(url);
+            Url url = new Url();
+            url.setLongUrl(longUrl);
+            url.setShortCode(shortCode);
+            urlRepository.save(url);
+            return new JsonApiResponse(url);
+        }
     }
 
     public String generateShortCode() {
@@ -57,8 +67,8 @@ public class UrlService {
         return shortCode.toString();
     }
 
-    public Optional<Url> getOriginalUrl(String shortCode) {
-        Optional<Url> optionalUrl = urlRepository.findByShortCode(shortCode);
+    public Optional<Url> getValidOriginalUrl(String shortCode) {
+        Optional<Url> optionalUrl = urlRepository.findByShortCodeAndValid(shortCode, true);
         optionalUrl.ifPresent(url -> {
             url.setUsageCount(url.getUsageCount() + 1);
             url.setLastUsedAt(LocalDateTime.now());
@@ -67,12 +77,24 @@ public class UrlService {
         return optionalUrl;
     }
 
+    public List<Url> getAllByValid(boolean valid) {
+        return urlRepository.findAllByValid(valid);
+    }
+
+    public Optional<Url> getShortCodeByLongUrlAndValid(String longUrl) {
+        return urlRepository.findByLongUrlAndValid(longUrl, true);
+    }
+
     public Optional<Url> getUrlStats(String shortCode) {
         return urlRepository.findByShortCode(shortCode);
     }
 
     public List<Url> getTop10Urls() {
-        return urlRepository.findTop10ByOrderByUsageCountDesc();
+        return urlRepository.findTop10ByValidTrueOrderByUsageCountDesc();
+    }
+
+    public List<Url> getAll() {
+        return urlRepository.findAll();
     }
 
     @Scheduled(fixedRate = 600000)
@@ -84,13 +106,4 @@ public class UrlService {
             urlRepository.save(url);
         });
     }
-
-    public Optional<Url> getShortCodeByLongUrl(String longUrl) {
-        return urlRepository.findByLongUrl(longUrl);
-    }
-
-    public List<Url> getAll() {
-        return urlRepository.findAll();
-    }
-
 }

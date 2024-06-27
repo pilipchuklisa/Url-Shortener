@@ -1,9 +1,6 @@
 package com.example.urlshortener.controller;
 
-import com.example.urlshortener.dto.JsonApiRequest;
-import com.example.urlshortener.dto.JsonApiResponse;
-import com.example.urlshortener.dto.UrlStatsResponse;
-import com.example.urlshortener.dto.UrlTopResponse;
+import com.example.urlshortener.dto.*;
 import com.example.urlshortener.model.Url;
 import com.example.urlshortener.service.UrlService;
 import org.springframework.http.HttpStatus;
@@ -33,7 +30,7 @@ public class UrlController {
 
     @GetMapping(value = "/{shortCode}")
     public ResponseEntity<Void> redirectToOriginal(@PathVariable String shortCode) {
-        Optional<Url> urlOptional = urlService.getOriginalUrl(shortCode);
+        Optional<Url> urlOptional = urlService.getValidOriginalUrl(shortCode);
         if (urlOptional.isPresent()) {
             Url url = urlOptional.get();
             return ResponseEntity.status(HttpStatus.FOUND)
@@ -45,8 +42,8 @@ public class UrlController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<JsonApiResponse>> getUrls() {
-        List<Url> urls = urlService.getAll();
+    public ResponseEntity<List<JsonApiResponse>> getValidUrls() {
+        List<Url> urls = urlService.getAllByValid(true);
         List<JsonApiResponse> response = urls.stream()
                 .map(JsonApiResponse::new)
                 .collect(Collectors.toList());
@@ -55,7 +52,7 @@ public class UrlController {
 
     @GetMapping("/search")
     public ResponseEntity<JsonApiResponse> getShortCodeByLongUrl(@RequestParam String longUrl) {
-        Optional<Url> urlOptional = urlService.getShortCodeByLongUrl(longUrl);
+        Optional<Url> urlOptional = urlService.getShortCodeByLongUrlAndValid(longUrl);
         if (urlOptional.isPresent()) {
             Url url = urlOptional.get();
             JsonApiResponse response = new JsonApiResponse(url);
@@ -82,6 +79,15 @@ public class UrlController {
         List<Url> topUrls = urlService.getTop10Urls();
         List<UrlTopResponse> response = topUrls.stream()
                 .map(UrlTopResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/admin/urls")
+    public ResponseEntity<List<AdminUrlResponse>> getAllUrls() {
+        List<Url> topUrls = urlService.getAll();
+        List<AdminUrlResponse> response = topUrls.stream()
+                .map(AdminUrlResponse::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }

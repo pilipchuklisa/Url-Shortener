@@ -25,8 +25,8 @@ spring.jpa.hibernate.ddl-auto=update
 - Запустите приложение
 
 ## API Endpoints
-### Публичные эндпоинты
-#### Создание короткого URL
+## Публичные эндпоинты
+### Создание короткого URL
 - Запрос:
 ```
 POST /api/urls
@@ -58,13 +58,14 @@ Content-Type: application/vnd.api+json
 }
 ```
 ### Перенаправление на оригинальный URL
+(Не требует авторизации)
 - Запрос:
 ```
 GET /api/urls/{shortCode}
 ```
 - Ответ:
 Перенаправляет на оригинальный URL с HTTP 302 Found.
-### Получение всех созданных URL
+### Получение всех доступных URL
 - Запрос:
 ```
 GET /api/urls
@@ -140,9 +141,7 @@ Content-Type: application/vnd.api+json
   }
 }
 ```
-
 ### Получение топ-10 наиболее используемых URL
-
 - Запрос:
 ```
 GET /api/urls/admin/top10
@@ -175,7 +174,45 @@ Content-Type: application/vnd.api+json
   ]
 }
 ```
+### Получение всех URL
+- Запрос:
+```
+GET /api/urls/admin/urls
+```
+- Ответ:
+```
+HTTP/1.1 200 OK
+Content-Type: application/vnd.api+json
 
+{
+  "data": [
+    {
+      "type": "urls",
+      "id": "1",
+      "attributes": {
+        "shortCode": "abc123",
+        "longUrl": "http://example1.com",
+        "createdAt": "2024-06-27T11:43:52.581923",
+        "usageCount": 0,
+        "lastUsedAt": null,
+        "valid": false
+       }
+    }, 
+    {  
+      "type": "urls",
+      "id": "2",
+      "attributes": {
+        "shortCode": "AbC123",
+        "longUrl": "http://example2.com",
+        "createdAt": "2024-06-27T11:43:52.581923",
+        "usageCount": 1,
+        "lastUsedAt": 2023-06-26T14:00:00,
+        "valid": frue
+       }
+    }
+  ]
+}
+```
 ## Периодические задачи
 Приложение имеет периодическую задачу, которая выполняется каждые 10 минут для аннулирования URL, которые не использовались более 10 минут. Аннулированные URL помечаются как недействительные и не будут перенаправляться.
 
